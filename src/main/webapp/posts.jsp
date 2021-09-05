@@ -22,7 +22,8 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
 
-    <title>Dream job!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Работа мечты</title>
 </head>
 <body>
 <div class="container pt-3">
@@ -35,6 +36,7 @@
                 <table class="table">
                     <thead>
                     <tr>
+                        <th scope="col"></th>
                         <th scope="col">ID</th>
                         <th scope="col">Position</th>
                         <th scope="col">Description</th>
@@ -44,6 +46,11 @@
                     <tbody>
                     <% for (Post post : Store.instOf().findAll()) { %>
                     <tr>
+                        <td>
+                            <a href="<%=request.getContextPath()%>/post/edit.jsp?id=<%=post.getId()%>">
+                                <i class="fa fa-edit mr-3"></i>
+                            </a>
+                        </td>
                         <td><%= post.getId()%>
                         </td>
                         <td><%= post.getName()%>
