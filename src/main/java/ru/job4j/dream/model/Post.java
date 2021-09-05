@@ -4,20 +4,24 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Post {
-    private final int id;
+    private int id;
     private final String name;
     private final String desc;
     private final Date created;
 
-    public Post(int id, String name, String desc, Date created) {
+    public Post(int id, String name, String desc) {
         this.id = id;
         this.name = name;
         this.desc = desc;
-        this.created = created;
+        created = new Date();
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
