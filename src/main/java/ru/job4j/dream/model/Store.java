@@ -38,6 +38,10 @@ public class Store {
         posts.put(post.getId(), post);
     }
 
+    public void remove(int id) {
+        candidates.remove(id);
+    }
+
     public Post findPostById(int id) {
         return posts.get(id);
     }

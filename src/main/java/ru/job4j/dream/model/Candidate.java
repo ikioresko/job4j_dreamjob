@@ -36,8 +36,7 @@ public class Candidate {
             return false;
         }
         Candidate candidate = (Candidate) o;
-        return id == candidate.id &&
-                Objects.equals(name, candidate.name);
+        return id == candidate.id && Objects.equals(name, candidate.name);
     }
 
     @Override

@@ -42,6 +42,8 @@
                         <th scope="col"></th>
                         <th scope="col">ID</th>
                         <th scope="col">Названия</th>
+                        <th scope="col">Фото</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,8 +53,17 @@
                                 <a href='<c:url value="/candidate/edit.jsp?id=${can.id}"/>'>
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
+                            </td>
                             <td><c:out value="${can.id}"/></td>
                             <td><c:out value="${can.name}"/></td>
+                            <td>
+                                <a href='<c:url value="/photo/upload.jsp?id=${can.id}"/>'>
+                                    Добавить фото</a>
+                            </td>
+                            <td>
+                                <a href='<c:url value="/photo/remove.jsp?id=${can.id}"/>'>
+                                    Удалить кандидата и фото</a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
