@@ -1,19 +1,19 @@
-package ru.job4j.dream.servlet;
+package ru.job4j.dream.servlets;
 
-import ru.job4j.dream.model.Candidate;
-import ru.job4j.dream.model.Store;
+import ru.job4j.dream.store.MemStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
-public class CandidateServlet extends HttpServlet {
+public class RemoveServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setAttribute("candidates", Store.instOf().findAllCandidates());
+        req.setAttribute("candidates", MemStore.instOf().findAllCandidates());
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
 
@@ -21,8 +21,9 @@ public class CandidateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         req.setCharacterEncoding("UTF-8");
-        Store.instOf().save(new Candidate(Integer.parseInt(req.getParameter("id")),
-                req.getParameter("name")));
+        MemStore.instOf().remove(Integer.parseInt(req.getParameter("id")));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
+        File file = new File("c:\\images\\" + req.getParameter("id") + ".jpg");
+        file.delete();
     }
 }
