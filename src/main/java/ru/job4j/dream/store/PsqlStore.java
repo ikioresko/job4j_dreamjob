@@ -14,7 +14,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PsqlStore implements Store {
+    private static final Logger LOG = LoggerFactory.getLogger(PsqlStore.class.getName());
     private final BasicDataSource pool = new BasicDataSource();
 
     private PsqlStore() {
@@ -65,7 +69,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
         return posts;
     }
@@ -82,7 +86,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
         return candidates;
     }
@@ -118,7 +122,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
         return candidate;
     }
@@ -140,7 +144,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
         return post;
     }
@@ -152,7 +156,7 @@ public class PsqlStore implements Store {
             ps.setInt(2, candidate.getId());
             ps.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
     }
 
@@ -164,7 +168,7 @@ public class PsqlStore implements Store {
             ps.setInt(3, post.getId());
             ps.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
     }
 
@@ -175,15 +179,14 @@ public class PsqlStore implements Store {
                 "SELECT * FROM post WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    post = new Post(rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getString("description"),
-                            rs.getTimestamp("created"));
-                }
+                rs.next();
+                post = new Post(rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getTimestamp("created"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
         return post;
     }
@@ -195,13 +198,12 @@ public class PsqlStore implements Store {
                 "SELECT * FROM candidates WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    candidate = new Candidate(rs.getInt("id"),
-                            rs.getString("name"));
-                }
+                rs.next();
+                candidate = new Candidate(rs.getInt("id"),
+                        rs.getString("name"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
         return candidate;
     }
@@ -213,7 +215,7 @@ public class PsqlStore implements Store {
             ps.setInt(1, id);
             ps.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
     }
 
@@ -224,7 +226,7 @@ public class PsqlStore implements Store {
             ps.setInt(1, id);
             ps.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception: ", e);
         }
     }
 }
