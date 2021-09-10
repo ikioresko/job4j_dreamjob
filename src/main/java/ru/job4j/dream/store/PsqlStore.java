@@ -39,8 +39,8 @@ public class PsqlStore implements Store {
         pool.setUrl(cfg.getProperty("jdbc.url"));
         pool.setUsername(cfg.getProperty("jdbc.username"));
         pool.setPassword(cfg.getProperty("jdbc.password"));
-        pool.setMinIdle(50);
-        pool.setMaxIdle(55);
+        pool.setMinIdle(5);
+        pool.setMaxIdle(10);
         pool.setMaxOpenPreparedStatements(100);
     }
 
@@ -179,11 +179,12 @@ public class PsqlStore implements Store {
                 "SELECT * FROM post WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                rs.next();
-                post = new Post(rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getTimestamp("created"));
+                if (rs.next()) {
+                    post = new Post(rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getTimestamp("created"));
+                }
             }
         } catch (Exception e) {
             LOG.error("Exception: ", e);
@@ -198,9 +199,10 @@ public class PsqlStore implements Store {
                 "SELECT * FROM candidates WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                rs.next();
-                candidate = new Candidate(rs.getInt("id"),
-                        rs.getString("name"));
+                if (rs.next()) {
+                    candidate = new Candidate(rs.getInt("id"),
+                            rs.getString("name"));
+                }
             }
         } catch (Exception e) {
             LOG.error("Exception: ", e);
