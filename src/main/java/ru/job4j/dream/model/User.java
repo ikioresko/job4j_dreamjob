@@ -8,6 +8,15 @@ public class User {
     private String email;
     private String password;
 
+    public User userOf(int id, String name, String email, String password) {
+        User user = new User();
+        user.id = id;
+        user.name = name;
+        user.email = email;
+        user.password = password;
+        return user;
+    }
+
     public int getId() {
         return id;
     }
@@ -55,5 +64,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "User{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", email='" + email + '\''
+                + ", password='" + password + '\'' + '}';
     }
 }

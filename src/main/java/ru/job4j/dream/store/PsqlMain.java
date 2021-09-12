@@ -2,9 +2,10 @@ package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 public class PsqlMain {
-      public static void main(String[] args) {
+    public static void main(String[] args) {
         Store store = PsqlStore.instOf();
         store.save(new Candidate(0, "Candidate 1"));
         store.save(new Candidate(0, "Candidate 2"));
@@ -25,5 +26,8 @@ public class PsqlMain {
                     + " " + post.getDesc()
                     + " " + post.getCreated());
         }
+        store.save(new User().userOf(0, "User", "root@local", "root"));
+        store.save(new User().userOf(0, "User", "user@local", "user"));
+        System.out.println(store.findUserByEmail("root@local"));
     }
 }

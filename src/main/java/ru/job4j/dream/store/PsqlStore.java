@@ -16,6 +16,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.User;
 
 public class PsqlStore implements Store {
     private static final Logger LOG = LoggerFactory.getLogger(PsqlStore.class.getName());
@@ -109,6 +110,15 @@ public class PsqlStore implements Store {
         }
     }
 
+    @Override
+    public void save(User user) {
+        if (user.getId() == 0) {
+            create(user);
+        } else {
+            update(user);
+        }
+    }
+
     private Candidate create(Candidate candidate) {
         try (PreparedStatement ps = getCn().prepareStatement(
                 "INSERT INTO candidates(name) VALUES (?)",
@@ -149,6 +159,27 @@ public class PsqlStore implements Store {
         return post;
     }
 
+    private User create(User user) {
+        try (PreparedStatement ps = getCn().prepareStatement(
+                "INSERT INTO users(name, email, password) VALUES (? , ? , ?) "
+                        + "ON CONFLICT DO NOTHING",
+                PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
+        return user;
+    }
+
     private void update(Candidate candidate) {
         try (PreparedStatement ps = getCn().prepareStatement(
                 "UPDATE candidates SET name = ? WHERE id = ?")) {
@@ -166,6 +197,19 @@ public class PsqlStore implements Store {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDesc());
             ps.setInt(3, post.getId());
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
+    }
+
+    private void update(User user) {
+        try (PreparedStatement ps = getCn().prepareStatement(
+                "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?")) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("Exception: ", e);
@@ -208,6 +252,26 @@ public class PsqlStore implements Store {
             LOG.error("Exception: ", e);
         }
         return candidate;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User user = null;
+        try (PreparedStatement ps = getCn().prepareStatement(
+                "SELECT * FROM users WHERE email = ?")) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = new User().userOf(rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
+        return user;
     }
 
     @Override
