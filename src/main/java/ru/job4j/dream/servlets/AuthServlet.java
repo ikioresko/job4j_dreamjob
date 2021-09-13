@@ -25,13 +25,13 @@ public class AuthServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        if ("root@local".equals(email) && "root".equals(password)) {
+        User users = PsqlStore.instOf().findUserByEmail(email);
+        if (users != null
+                && users.getEmail().equals(email)
+                && users.getPassword().equals(password)) {
             HttpSession sc = req.getSession();
-            User admin = new User();
-            admin.setName("Admin");
-            admin.setEmail(email);
-            sc.setAttribute("user", admin);
-            resp.sendRedirect(req.getContextPath() + "/posts.do");
+            sc.setAttribute("user", users);
+            resp.sendRedirect(req.getContextPath() + "/index.do");
         } else {
             req.setAttribute("error", "Не верный email или пароль");
             req.getRequestDispatcher("login/login.jsp").forward(req, resp);
