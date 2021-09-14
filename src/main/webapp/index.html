@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        div {
+            display: block;
+            margin: 1%;
+        }
+
+        .row {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <h1>My First Bootstrap Page</h1>
+    <p>This is some text.</p>
+    <div class="form-ex">
+        <form>
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Имя">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Фамилия">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="Control">Пол</label>
+                    <select class="form-control" id="Control">
+                        <option>Муж</option>
+                        <option>Жен</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="Text">Описание</label>
+                    <textarea class="form-control" id="Text" rows="5" cols="52"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="button">
+                    <button type="submit" class="btn btn-primary">Подтвердить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Пол</th>
+            <th scope="col">Описание</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>unknown</td>
+            <td>empty</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>unknown</td>
+            <td>empty</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>unknown</td>
+            <td>empty</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
