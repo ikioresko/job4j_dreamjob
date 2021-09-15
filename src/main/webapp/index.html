@@ -9,6 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
+        let num = 3;
+
         function validate() {
             var x = Boolean(true);
             if ($('#firstName').val() === "") {
@@ -28,6 +30,27 @@
                 x = false;
             }
             return x;
+        }
+
+        function getNum() {
+            num = ++num;
+            return num;
+        }
+
+        function addRow() {
+            //получаем значение поля usr
+            const firstName = $('#firstName').val();
+            const lastName = $('#lastName').val();
+            const sex = $('#sex').val();
+            const description = $('#description').val();
+            //получаем ссылку на последний элемент в таблице.
+            //и после него добавляем html
+            $('#tab tr:last').after('<tr>' +
+                '<th>' + getNum() + '</th>' +
+                '<td>' + firstName + '</td>' +
+                '<td>' + lastName + '</td>' +
+                '<td>' + sex + '</td>' +
+                '<td>' + description + '</td></tr>');
         }
     </script>
     <style>
@@ -76,17 +99,19 @@
             </div>
             <div class="row">
                 <div class="button">
-                    <button type="submit" class="btn btn-primary"
-                            onclick="return validate();">Подтвердить
+                    <button type="button" class="btn btn-primary"
+                            onclick="if (validate()=== true) {
+                                addRow();
+                            }">Подтвердить
                     </button>
                 </div>
             </div>
         </form>
     </div>
-    <table class="table">
+    <table class="table" id="tab">
         <thead>
         <tr>
-            <th scope="col">#</th>
+            <th id="num" scope="col">#</th>
             <th scope="col">Имя</th>
             <th scope="col">Фамилия</th>
             <th scope="col">Пол</th>
