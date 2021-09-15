@@ -8,6 +8,28 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            var x = Boolean(true);
+            if ($('#firstName').val() === "") {
+                alert($('#firstName').attr('title'));
+                x = false;
+            }
+            if ($('#lastName').val() === '') {
+                alert($('#lastName').attr('title'));
+                x = false;
+            }
+            if ($('#sex').val() === 'Select') {
+                alert($('#sex').attr('title'));
+                x = false;
+            }
+            if ($('#description').val() === '') {
+                alert($('#description').attr('title'));
+                x = false;
+            }
+            return x;
+        }
+    </script>
     <style>
         div {
             display: block;
@@ -27,16 +49,19 @@
         <form>
             <div class="row">
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Имя">
+                    <input type="text" class="form-control" id="firstName"
+                           title="Enter first name" placeholder="Имя">
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Фамилия">
+                    <input type="text" class="form-control" id="lastName"
+                           title="Enter last name" placeholder="Фамилия">
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label for="Control">Пол</label>
-                    <select class="form-control" id="Control">
+                    <label for="sex">Пол</label>
+                    <select class="form-control" id="sex" title="Select gender">
+                        <option selected>Select</option>
                         <option>Муж</option>
                         <option>Жен</option>
                     </select>
@@ -44,13 +69,16 @@
             </div>
             <div class="row">
                 <div class="form-group">
-                    <label for="Text">Описание</label>
-                    <textarea class="form-control" id="Text" rows="5" cols="52"></textarea>
+                    <label for="description">Описание</label>
+                    <textarea class="form-control" id="description"
+                              title="Enter Description" rows="5" cols="52"></textarea>
                 </div>
             </div>
             <div class="row">
                 <div class="button">
-                    <button type="submit" class="btn btn-primary">Подтвердить</button>
+                    <button type="submit" class="btn btn-primary"
+                            onclick="return validate();">Подтвердить
+                    </button>
                 </div>
             </div>
         </form>
