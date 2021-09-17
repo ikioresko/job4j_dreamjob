@@ -22,7 +22,20 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-
+    <script>
+        function validate() {
+            var x = Boolean(true);
+            if ($('#email').val() === "") {
+                alert($('#email').attr('title'));
+                x = false;
+            }
+            if ($('#password').val() === "") {
+                alert($('#password').attr('title'));
+                x = false;
+            }
+            return x;
+        }
+    </script>
     <title>Работа мечты</title>
 </head>
 <body>
@@ -31,7 +44,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link"
-                   href="<%=request.getContextPath()%>/index.do">Главная</a>
+                   href="<%=request.getContextPath()%>/index.jsp">Главная</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
@@ -75,14 +88,17 @@
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
-                        <label>Почта</label>
-                        <input type="text" class="form-control" name="email">
+                        <label for="email">Почта</label>
+                        <input type="text" class="form-control" id="email"
+                               title="Enter email" name="email">
                     </div>
                     <div class="form-group">
-                        <label>Пароль</label>
-                        <input type="text" class="form-control" name="password">
+                        <label for="password">Пароль</label>
+                        <input type="text" class="form-control" id="password"
+                               title="Enter password" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <button type="submit" class="btn btn-primary"
+                            onclick="return validate();">Войти</button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">
                             <c:out value="${error}"/>

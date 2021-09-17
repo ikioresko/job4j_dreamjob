@@ -1,11 +1,11 @@
 package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,6 +14,8 @@ public class MemStore implements Store {
     private static final AtomicInteger POST_ID = new AtomicInteger(3);
     private static final AtomicInteger USER_ID = new AtomicInteger();
     private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(3);
+    private static final AtomicInteger CITY_ID = new AtomicInteger(0);
+    private final Map<Integer, City> cities = new ConcurrentHashMap<>();
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
@@ -21,16 +23,16 @@ public class MemStore implements Store {
     private MemStore() {
 //        posts.put(1, new Post(1,
 //                "Junior Java Job",
-//                "Java Developer"));
+//                "Java Developer", new Date()));
 //        posts.put(2, new Post(2,
 //                "Middle Java Job",
-//                "Wanted Java Developer"));
+//                "Wanted Java Developer", new Date()));
 //        posts.put(3, new Post(3,
 //                "Senior Java Job",
-//                "Wanted Senior Java Developer"));
-//        candidates.put(1, new Candidate(1, "Junior Java"));
-//        candidates.put(2, new Candidate(2, "Middle Java"));
-//        candidates.put(3, new Candidate(3, "Senior Java"));
+//                "Wanted Senior Java Developer", new Date()));
+//        candidates.put(1, new Candidate(1, "Junior Java", 1, new Date()));
+//        candidates.put(2, new Candidate(2, "Middle Java", 2, new Date()));
+//        candidates.put(3, new Candidate(3, "Senior Java", 3, new Date()));
     }
 
     public static Store instOf() {
@@ -42,6 +44,17 @@ public class MemStore implements Store {
             post.setId(POST_ID.incrementAndGet());
         }
         posts.put(post.getId(), post);
+    }
+
+    private Date getStartDateToday() {
+        Date date = new Date();
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
     @Override
@@ -78,8 +91,37 @@ public class MemStore implements Store {
     }
 
     @Override
+    public Collection<Post> todayPosts() {
+        List<Post> list = new ArrayList<>();
+        Date startDate = getStartDateToday();
+        for (Post post : findAllPosts()) {
+            if (startDate.compareTo(post.getCreated()) <= 0) {
+                list.add(post);
+            }
+        }
+        return list;
+    }
+
+    @Override
     public Collection<Candidate> findAllCandidates() {
         return candidates.values();
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        return cities.values();
+    }
+
+    @Override
+    public Collection<Candidate> todayCandidates() {
+        List<Candidate> list = new ArrayList<>();
+        Date startDate = getStartDateToday();
+        for (Candidate can : findAllCandidates()) {
+            if (startDate.compareTo(can.getCreated()) <= 0) {
+                list.add(can);
+            }
+        }
+        return list;
     }
 
     @Override

@@ -22,6 +22,39 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/dreamjob/todayPost',
+                dataType: 'json'
+            }).done(function (data) {
+                for (var post of data) {
+                    $('#headerPost').append(`<tr><td>${post.id}</td>
+                    <td>${post.name}</td>
+                    <td>${post.desc}</td></tr>`)
+                }
+            }).fail(function (err) {
+                console.log(err);
+            });
+        });
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/dreamjob/todayCandidate',
+                dataType: 'json'
+            }).done(function (data) {
+                for (var candidate of data) {
+                    $('#headerCandidate').append(`<tr><td>${candidate.id}</td>
+                    <td>${candidate.name}</td>`)
+                }
+            }).fail(function (err) {
+                console.log(err);
+            });
+        });
+    </script>
     <title>Работа мечты</title>
 </head>
 <div class="container pt-3">
@@ -29,7 +62,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link"
-                   href="<%=request.getContextPath()%>/index.do">Главная</a>
+                   href="<%=request.getContextPath()%>/index.jsp">Главная</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
@@ -66,6 +99,17 @@
                 Сегодняшние вакансии.
             </div>
             <div class="card-body">
+                <div class="card-body">
+                    <table class="table" id="headerPost">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Position</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -75,6 +119,14 @@
                 Сегодняшние кандидаты.
             </div>
             <div class="card-body">
+                <table class="table" id="headerCandidate">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                    </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>

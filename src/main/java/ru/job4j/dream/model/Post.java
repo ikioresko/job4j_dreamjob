@@ -9,13 +9,6 @@ public class Post {
     private final String desc;
     private final Date created;
 
-    public Post(int id, String name, String desc) {
-        this.id = id;
-        this.name = name;
-        this.desc = desc;
-        created = new Date();
-    }
-
     public Post(int id, String name, String desc, Date created) {
         this.id = id;
         this.name = name;

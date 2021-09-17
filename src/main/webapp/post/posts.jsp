@@ -33,7 +33,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link"
-                   href="<%=request.getContextPath()%>/index.do">Главная</a>
+                   href="<%=request.getContextPath()%>/index.jsp">Главная</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"

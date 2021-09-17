@@ -33,7 +33,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link"
-                   href="<%=request.getContextPath()%>/index.do">Главная</a>
+                   href="<%=request.getContextPath()%>/index.jsp">Главная</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
@@ -76,7 +76,7 @@
                         <tr>
                             <th scope="col"></th>
                             <th scope="col">ID</th>
-                            <th scope="col">Названия</th>
+                            <th scope="col">Имя</th>
                             <th scope="col">Фото</th>
                             <th scope="col"></th>
                         </tr>

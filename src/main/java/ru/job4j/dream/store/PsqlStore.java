@@ -2,6 +2,7 @@ package ru.job4j.dream.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 
 import java.io.BufferedReader;
@@ -66,7 +67,8 @@ public class PsqlStore implements Store {
                 while (it.next()) {
                     posts.add(new Post(it.getInt("id"),
                             it.getString("name"),
-                            it.getString("description")));
+                            it.getString("description"),
+                            it.getDate("created")));
                 }
             }
         } catch (Exception e) {
@@ -83,13 +85,72 @@ public class PsqlStore implements Store {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     candidates.add(new Candidate(it.getInt("id"),
-                            it.getString("name")));
+                            it.getString("name"),
+                            it.getInt("city_id"),
+                            it.getDate("created")));
                 }
             }
         } catch (Exception e) {
             LOG.error("Exception: ", e);
         }
         return candidates;
+    }
+
+    @Override
+    public Collection<Post> todayPosts() {
+        List<Post> posts = new ArrayList<>();
+        try (PreparedStatement ps = getCn().prepareStatement(
+                "SELECT * FROM post WHERE created = current_date")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    posts.add(new Post(it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            it.getDate("created")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
+        return posts;
+    }
+
+    @Override
+    public Collection<Candidate> todayCandidates() {
+        List<Candidate> candidates = new ArrayList<>();
+        try (PreparedStatement ps = getCn().prepareStatement(
+                "SELECT * FROM candidates WHERE created = current_date")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    candidates.add(new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("city_id"),
+                            it.getDate("created")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
+        return candidates;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        List<City> cities = new ArrayList<>();
+        try (PreparedStatement ps = getCn().prepareStatement("SELECT * FROM city")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(it.getInt("id"),
+                            it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception: ", e);
+        }
+        return cities;
     }
 
     @Override
@@ -120,11 +181,15 @@ public class PsqlStore implements Store {
     }
 
     private Candidate create(Candidate candidate) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String text = formatter.format(candidate.getCreated());
         try (PreparedStatement ps = getCn().prepareStatement(
-                "INSERT INTO candidates(name) VALUES (?)",
+                "INSERT INTO candidates(name, city_id, created) VALUES (? , ? , ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getCityId());
+            ps.setTimestamp(3, Timestamp.valueOf(text));
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -138,7 +203,7 @@ public class PsqlStore implements Store {
     }
 
     private Post create(Post post) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         String text = formatter.format(post.getCreated());
         try (PreparedStatement ps = getCn().prepareStatement(
                 "INSERT INTO post(name, description, created) VALUES (? , ? , ?)",
@@ -182,9 +247,10 @@ public class PsqlStore implements Store {
 
     private void update(Candidate candidate) {
         try (PreparedStatement ps = getCn().prepareStatement(
-                "UPDATE candidates SET name = ? WHERE id = ?")) {
+                "UPDATE candidates SET name = ?, city_id = ? WHERE id = ?")) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getId());
+            ps.setInt(2, candidate.getCityId());
+            ps.setInt(3, candidate.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("Exception: ", e);
@@ -245,7 +311,9 @@ public class PsqlStore implements Store {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     candidate = new Candidate(rs.getInt("id"),
-                            rs.getString("name"));
+                            rs.getString("name"),
+                            rs.getInt("city_id"),
+                            rs.getTimestamp("created"));
                 }
             }
         } catch (Exception e) {

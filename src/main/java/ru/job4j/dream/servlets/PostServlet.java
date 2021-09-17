@@ -2,13 +2,13 @@ package ru.job4j.dream.servlets;
 
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.store.PsqlStore;
-import ru.job4j.dream.store.Store;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 public class PostServlet extends HttpServlet {
     @Override
@@ -22,9 +22,11 @@ public class PostServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         req.setCharacterEncoding("UTF-8");
-        PsqlStore.instOf().save(new Post(Integer.parseInt(req.getParameter("id")),
+        PsqlStore.instOf().save(new Post(
+                Integer.parseInt(req.getParameter("id")),
                 req.getParameter("name"),
-                req.getParameter("desc")));
+                req.getParameter("desc"),
+                new Date()));
         resp.sendRedirect(req.getContextPath() + "/posts.do");
     }
 }

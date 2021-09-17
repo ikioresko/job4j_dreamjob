@@ -2,6 +2,7 @@ package ru.job4j.dream.servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.store.PsqlStore;
 
 import javax.servlet.ServletException;
@@ -11,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-public class IndexServlet extends HttpServlet {
+public class CityServlet extends HttpServlet {
     private final static Gson GSON = new GsonBuilder().create();
 
     @Override
@@ -21,10 +23,10 @@ public class IndexServlet extends HttpServlet {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setContentType("application/json; charset=utf-8");
         OutputStream output = resp.getOutputStream();
-        String json = GSON.toJson(PsqlStore.instOf().todayPosts());
+        List<City> cities = (List<City>) PsqlStore.instOf().findAllCities();
+        String json = GSON.toJson(cities);
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
         output.close();
-        req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 }

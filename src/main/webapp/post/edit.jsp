@@ -1,5 +1,6 @@
 <%@ page import="ru.job4j.dream.model.Post" %>
 <%@ page import="ru.job4j.dream.store.PsqlStore" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <!doctype html>
@@ -23,13 +24,26 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-
+    <script>
+        function validate() {
+            var x = Boolean(true);
+            if ($('#name').val() === "") {
+                alert($('#name').attr('title'));
+                x = false;
+            }
+            if ($('#desc').val() === "") {
+                alert($('#desc').attr('title'));
+                x = false;
+            }
+            return x;
+        }
+    </script>
     <title>Работа мечты</title>
 </head>
 <body>
 <%
     String id = request.getParameter("id");
-    Post post = new Post(0, "", "");
+    Post post = new Post(0, "", "", new Date());
     if (id != null) {
         post = PsqlStore.instOf().findPostById(Integer.parseInt(id));
     }
@@ -48,12 +62,15 @@
                 <form action="<%=request.getContextPath()%>/posts.do?id=<%=post.getId()%>"
                       method="post">
                     <div class="form-group">
-                        <label>Название вакансии</label>
-                        <input type="text" class="form-control" name="name" value="<%=post.getName()%>">
-                        <label>Описание</label>
-                        <input type="text" class="form-control" name="desc" value="<%=post.getDesc()%>">
+                        <label for="name">Название вакансии</label>
+                        <input type="text" class="form-control" id="name"
+                               title="Enter name" name="name" value="<%=post.getName()%>">
+                        <label for="desc">Описание</label>
+                        <input type="text" class="form-control" id="desc"
+                               title="Enter description" name="desc" value="<%=post.getDesc()%>">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary"
+                            onclick="return validate()">Сохранить</button>
                 </form>
             </div>
         </div>
