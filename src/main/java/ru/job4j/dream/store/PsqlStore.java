@@ -68,7 +68,7 @@ public class PsqlStore implements Store {
                     posts.add(new Post(it.getInt("id"),
                             it.getString("name"),
                             it.getString("description"),
-                            it.getDate("created")));
+                            it.getTimestamp("created")));
                 }
             }
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class PsqlStore implements Store {
                     candidates.add(new Candidate(it.getInt("id"),
                             it.getString("name"),
                             it.getInt("city_id"),
-                            it.getDate("created")));
+                            it.getTimestamp("created")));
                 }
             }
         } catch (Exception e) {
@@ -100,14 +100,14 @@ public class PsqlStore implements Store {
     public Collection<Post> todayPosts() {
         List<Post> posts = new ArrayList<>();
         try (PreparedStatement ps = getCn().prepareStatement(
-                "SELECT * FROM post WHERE created = current_date")
+                "SELECT * FROM post WHERE created BETWEEN NOW() - INTERVAL '24 HOUR' and NOW()")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     posts.add(new Post(it.getInt("id"),
                             it.getString("name"),
                             it.getString("description"),
-                            it.getDate("created")));
+                            it.getTimestamp("created")));
                 }
             }
         } catch (Exception e) {
@@ -120,14 +120,15 @@ public class PsqlStore implements Store {
     public Collection<Candidate> todayCandidates() {
         List<Candidate> candidates = new ArrayList<>();
         try (PreparedStatement ps = getCn().prepareStatement(
-                "SELECT * FROM candidates WHERE created = current_date")
+                "SELECT * FROM candidates "
+                        + "WHERE created BETWEEN NOW() - INTERVAL '24 HOUR' and NOW()")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     candidates.add(new Candidate(it.getInt("id"),
                             it.getString("name"),
                             it.getInt("city_id"),
-                            it.getDate("created")));
+                            it.getTimestamp("created")));
                 }
             }
         } catch (Exception e) {
@@ -203,7 +204,7 @@ public class PsqlStore implements Store {
     }
 
     private Post create(Post post) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String text = formatter.format(post.getCreated());
         try (PreparedStatement ps = getCn().prepareStatement(
                 "INSERT INTO post(name, description, created) VALUES (? , ? , ?)",

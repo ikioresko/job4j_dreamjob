@@ -6,13 +6,13 @@ create TABLE post (
    id SERIAL PRIMARY KEY,
    name TEXT,
    description TEXT,
-   created date
+   created TIMESTAMP with time zone
 );
 create TABLE candidates (
    id SERIAL PRIMARY KEY,
    name TEXT,
    city_id smallint REFERENCES city,
-   created date
+   created TIMESTAMP with time zone
 );
 create TABLE users (
    id SERIAL PRIMARY KEY,

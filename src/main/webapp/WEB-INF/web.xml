@@ -56,14 +56,6 @@
         <servlet-name>CityServlet</servlet-name>
         <servlet-class>ru.job4j.dream.servlets.CityServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>TodayPostsServlet</servlet-name>
-        <servlet-class>ru.job4j.dream.servlets.TodayPostsServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>TodayCandidatesServlet</servlet-name>
-        <servlet-class>ru.job4j.dream.servlets.TodayCandidatesServlet</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>PostServlet</servlet-name>
         <url-pattern>/posts.do</url-pattern>
@@ -107,13 +99,5 @@
     <servlet-mapping>
         <servlet-name>CityServlet</servlet-name>
         <url-pattern>/cities</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>TodayPostsServlet</servlet-name>
-        <url-pattern>/todayPost</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>TodayCandidatesServlet</servlet-name>
-        <url-pattern>/todayCandidate</url-pattern>
     </servlet-mapping>
 </web-app>
