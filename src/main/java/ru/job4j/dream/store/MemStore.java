@@ -20,21 +20,6 @@ public class MemStore implements Store {
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
-    private MemStore() {
-//        posts.put(1, new Post(1,
-//                "Junior Java Job",
-//                "Java Developer", new Date()));
-//        posts.put(2, new Post(2,
-//                "Middle Java Job",
-//                "Wanted Java Developer", new Date()));
-//        posts.put(3, new Post(3,
-//                "Senior Java Job",
-//                "Wanted Senior Java Developer", new Date()));
-//        candidates.put(1, new Candidate(1, "Junior Java", 1, new Date()));
-//        candidates.put(2, new Candidate(2, "Middle Java", 2, new Date()));
-//        candidates.put(3, new Candidate(3, "Senior Java", 3, new Date()));
-    }
-
     public static Store instOf() {
         return INST;
     }

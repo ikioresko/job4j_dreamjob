@@ -11,7 +11,7 @@ create TABLE post (
 create TABLE candidates (
    id SERIAL PRIMARY KEY,
    name TEXT,
-   city_id smallint REFERENCES city,
+   city_id smallint REFERENCES city(id),
    created TIMESTAMP with time zone
 );
 create TABLE users (
