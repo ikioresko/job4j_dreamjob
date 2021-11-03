@@ -1,21 +1,17 @@
-create table if not exists city(
+create table city (
     id SERIAL PRIMARY KEY,
     name TEXT
 );
-
-insert into city(name) values('Moscow');
-
-create TABLE if not exists post(
+create TABLE post (
    id SERIAL PRIMARY KEY,
    name TEXT,
    description TEXT,
    created TIMESTAMP with time zone
 );
-
-create TABLE if not exists candidates(
+create TABLE candidates (
    id SERIAL PRIMARY KEY,
    name TEXT,
-   city_id smallint,
-   created TIMESTAMP with time zone,
-   foreign key (city_id) REFERENCES city(id)
+   city_id smallint REFERENCES city(id),
+   created TIMESTAMP with time zone
 );
+insert into city(name) values('Moscow');

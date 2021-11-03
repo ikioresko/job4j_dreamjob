@@ -24,10 +24,6 @@ public class PsqlStore implements Store {
     private static final PsqlStore INSTANCE = new PsqlStore();
     private final BasicDataSource pool;
 
-    public PsqlStore(BasicDataSource pool) {
-        this.pool = pool;
-    }
-
     private PsqlStore() {
         Properties cfg = new Properties();
         pool = new BasicDataSource();
