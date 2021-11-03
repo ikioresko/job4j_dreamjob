@@ -22,10 +22,15 @@ import ru.job4j.dream.model.User;
 public class PsqlStore implements Store {
     private static final Logger LOG = LoggerFactory.getLogger(PsqlStore.class.getName());
     private static final PsqlStore INSTANCE = new PsqlStore();
-    private final BasicDataSource pool = new BasicDataSource();
+    private final BasicDataSource pool;
+
+    public PsqlStore(BasicDataSource pool) {
+        this.pool = pool;
+    }
 
     private PsqlStore() {
         Properties cfg = new Properties();
+        pool = new BasicDataSource();
         try (BufferedReader io = new BufferedReader(
                 new InputStreamReader(
                         PsqlStore.class.getClassLoader()
